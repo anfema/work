@@ -1,0 +1,8 @@
+{{#each pullRequestGroups as |group|}}
+### {{group.title}}
+
+{{#each group.items as |pr|}}
+- {{pr.title}} [#{{pr.data.number}}]({{pr.data.url}}) {{pr.data.merge_commit_sha}}
+{{/each}}
+
+{{/each}}

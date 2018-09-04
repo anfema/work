@@ -1,0 +1,33 @@
+# EditorConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs
+# editorconfig.org
+
+# Disabled because eslint-plugin-prettier chokes on this,
+# because ember-cli-eslint is naive
+# root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = tab
+indent_size = 4
+
+[{package.json,config/*.json}]
+indent_style = space
+indent_size = 2
+
+[*.hbs]
+insert_final_newline = false
+
+[*.{diff,md}]
+trim_trailing_whitespace = false
+
+[*.{yaml,yml}]
+indent_style = space
+indent_size = 2
+
+[.prettierrc]
+indent_style = space
+indent_size = 2
