@@ -1,0 +1,49 @@
+{
+  "name": "work",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Florian Pichler <f.pichler@anfe.ma>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "work": "bin/work"
+  },
+  "dependencies": {
+    "@octokit/rest": "~15.11.0",
+    "chalk": "^2.4.1",
+    "cli-highlight": "^2.0.0",
+    "commander": "^2.17.1",
+    "conf": "^2.0.0",
+    "execa": "~1.0.0",
+    "get-stream": "~4.0.0",
+    "git-all-tags": "~1.0.0",
+    "git-commits": "~1.3.0",
+    "git-latest-semver-tag": "~1.0.2",
+    "git-repo-name": "~0.6.0",
+    "git-semver-tags": "~2.0.0",
+    "git-username": "~1.0.0",
+    "inquirer": "~6.2.0",
+    "lodash": "^4.17.10",
+    "p-each-series": "^1.0.0",
+    "p-map": "^1.2.0",
+    "pify": "~4.0.0",
+    "progress": "^2.0.0",
+    "rc": "~1.2.8",
+    "semver": "~5.5.1",
+    "split2": "~3.0.0",
+    "term-size": "^1.2.0",
+    "through2": "~2.0.3",
+    "through2-filter": "~3.0.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "~9.0.0",
+    "eslint": "~5.5.0",
+    "eslint-config-anfema": "~5.3.0",
+    "eslint-config-prettier": "~3.0.1",
+    "eslint-plugin-babel": "~5.1.0",
+    "eslint-plugin-import": "~2.14.0",
+    "eslint-plugin-prettier": "~2.6.2",
+    "handlebars": "~4.0.11",
+    "prettier": "~1.14.2"
+  }
+}
