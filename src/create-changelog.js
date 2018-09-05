@@ -5,7 +5,6 @@ const semver = require('semver');
 
 const octokit = require('../lib/octokit.js');
 const getCommits = require('../lib/git/get-commits.js');
-const lastTag = require('../lib/git/last-tag.js');
 const findPrId = require('../lib/git/find-pr-id.js');
 const render = require('../lib/changelog/render.js');
 
@@ -17,18 +16,12 @@ const createChangelog = async ({
 	changelog: changelogCategories,
 } = {}) => {
 	try {
-		if (!tagFrom) {
-			tagFrom = await lastTag();
-		}
-	} catch (err) {
-		console.log(`No tags found; can't create Changelog.`, err);
-
-		return;
-	}
-
-	try {
 		console.log(
-			chalk.green(`Rendering changelog from ${tagFrom}${tagTo ? ` to ${tagTo}` : ''}:`)
+			chalk.green(
+				`Rendering changelog from ${tagFrom ? tagFrom : 'Initial'}${
+					tagTo ? ` to ${tagTo}` : ''
+				}:`
+			)
 		);
 
 		let commits = await getCommits({ from: tagFrom, to: tagTo || '' });

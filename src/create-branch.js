@@ -85,6 +85,7 @@ module.exports = async ({ owner, repo, issue: number, username, branchFormat, de
 	}
 
 	try {
+		await execa('git', ['checkout', 'develop']);
 		await execa('git', ['checkout', '-b', branchName]);
 		await execa('git', ['push', '--set-upstream']);
 	} catch (err) {

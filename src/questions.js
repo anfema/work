@@ -3,10 +3,12 @@ const chalk = require('chalk');
 const inquirer = require('inquirer');
 const termSize = require('term-size');
 
+const defaults = require('./defaults.js');
 const config = require('./config.js');
 const settings = require('./settings.js');
 const octokit = require('../lib/octokit.js');
 const githubLogin = require('../lib/github/get-login.js');
+const versionTags = require('../lib/git/version-tags.js');
 
 const ask = async ({ owner, repo }, program) => {
 	if (!owner || !repo) {
@@ -203,6 +205,60 @@ const ask = async ({ owner, repo }, program) => {
 						(results.task === 'branch' && currentAnswers.issue === '') ||
 						(program.task === 'branch' && program.issue === undefined)
 					);
+				},
+			},
+		]);
+
+		results = Object.assign(results, answers);
+	}
+
+	if (results.task === 'changelog') {
+		const versions = await versionTags();
+
+		const answers = await inquirer.prompt([
+			{
+				name: 'tagFrom',
+				message: 'From where should the changelog start?',
+				type: 'list',
+				pageSize: Math.max(termSize().rows - 7, 5),
+				default: versions[0] || defaults.tagFrom,
+				choices: async () => {
+					return [
+						...versions,
+						{
+							name: 'Initial commit',
+							value: defaults.tagFrom,
+							short: 'Initial',
+						},
+					];
+				},
+				when() {
+					return program.tagFrom === undefined;
+				},
+			},
+			{
+				name: 'tagTo',
+				message: 'Where should the changelog end?',
+				type: 'list',
+				pageSize: Math.max(termSize().rows - 8, 5),
+				default: defaults.tagTo,
+				choices: async currentAnswers => {
+					const remainingVersions = versions.slice(
+						0,
+						versions.indexOf(currentAnswers.tagFrom)
+					);
+
+					return [
+						{
+							name: 'Current Head',
+							value: defaults.tagTo,
+							short: 'HEAD',
+						},
+						...remainingVersions,
+					];
+				},
+				when() {
+					return program.tagTo === undefined;
 				},
 			},
 		]);
