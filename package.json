@@ -9,7 +9,7 @@
     "work": "bin/work"
   },
   "dependencies": {
-    "@octokit/rest": "~15.11.0",
+    "@octokit/rest": "~15.11.1",
     "chalk": "^2.4.1",
     "cli-highlight": "^2.0.0",
     "commander": "^2.17.1",
@@ -20,6 +20,7 @@
     "git-username": "~1.0.0",
     "inquirer": "~6.2.0",
     "lodash": "^4.17.10",
+    "ora": "^3.0.0",
     "p-each-series": "^1.0.0",
     "p-map": "^1.2.0",
     "pify": "~4.0.0",
@@ -39,7 +40,7 @@
     "eslint-plugin-babel": "~5.1.0",
     "eslint-plugin-import": "~2.14.0",
     "eslint-plugin-prettier": "~2.6.2",
-    "handlebars": "~4.0.11",
+    "handlebars": "~4.0.12",
     "prettier": "~1.14.2"
   }
 }

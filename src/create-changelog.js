@@ -95,7 +95,7 @@ const createChangelog = async ({
 		);
 
 		const versions = new Map();
-		let currentVersion = 'UNRELEASED';
+		let currentVersion = tagTo || 'UNRELEASED';
 
 		const makeVersion = () => {
 			// Create data structure to sort commits into categories
