@@ -1,5 +1,6 @@
 const chalk = require('chalk');
 const execa = require('execa');
+const ora = require('ora');
 const { kebabCase } = require('lodash');
 
 const octokit = require('../lib/octokit.js');
@@ -17,13 +18,32 @@ const buildBranchName = (branchFormat, { username, number, title }) => {
 };
 
 module.exports = async ({ owner, repo, issue: number, username, branchFormat, defaultBranch }) => {
+	const spinner = ora('Creating branch…').start();
+
+	try {
+		spinner.text = `Fetching commits from origin`;
+
+		await execa('git', ['fetch']);
+	} catch (err) {
+		spinner.fail('Error fetching from GitHub');
+		console.error(err);
+
+		return;
+	}
+
+	spinner.text = `Checking git status`;
+
+	const status = await gitStatus();
+
 	let branchName;
 
 	try {
+		spinner.text = `Downloading issue data from GitHub`;
+
 		const res = await octokit().issues.get({ owner, repo, number });
 		const issue = res.data;
 
-		console.log(`${chalk.cyan(`#${number} ${issue.title}`)}\n`);
+		spinner.text = `Found data for ${chalk.cyan(`#${number} ${issue.title}`)}`;
 
 		branchName = buildBranchName(branchFormat, {
 			username,
@@ -35,38 +55,26 @@ module.exports = async ({ owner, repo, issue: number, username, branchFormat, de
 	}
 
 	if (!branchName) {
-		console.error(chalk.red(`Unable to build branch name`));
+		spinner.fail(`Unable to build branch name`);
 
 		process.exitCode = 1;
 
 		return;
 	}
 
-	try {
-		await execa('git', ['fetch']);
-	} catch (err) {
-		console.error(chalk.red('Error fetching'), err);
-
-		return;
-	}
-
-	const status = await gitStatus();
-
 	if (status.local === branchName) {
-		console.log(chalk.blue('Already there.'));
+		spinner.info(`Already there.`);
 
 		return;
 	}
 
 	if (status.local !== defaultBranch && status.clean === false) {
-		console.error(
-			chalk.yellow(
-				`\nCan't create branch. You are on <${status.local}> and have ${
-					status.files.length
-				} modified file${status.files.length === 1 ? '' : 's'}: ${chalk.reset(
-					status.files.map(line => `\n${line.state} ${line.file}`)
-				)}\n`
-			)
+		spinner.fail(
+			`Can't create branch. You are on ${chalk.blue(status.local)} and have ${
+				status.files.length
+			} modified file${status.files.length === 1 ? '' : 's'}: ${chalk.reset(
+				status.files.map(line => `\n${line.state} ${line.file}`)
+			)}`
 		);
 
 		process.exitCode = 1;
@@ -74,10 +82,12 @@ module.exports = async ({ owner, repo, issue: number, username, branchFormat, de
 		return;
 	}
 
+	spinner.text = `Checking branches`;
+
 	const branches = await branchList();
 
 	if (branches.local.includes(branchName)) {
-		console.log(chalk.yellow(`${branchName} already exists. \nPlease continue manually`));
+		spinner.warn(`${branchName} already exists. \nPlease continue manually`);
 
 		process.exitCode = 0;
 
@@ -85,9 +95,19 @@ module.exports = async ({ owner, repo, issue: number, username, branchFormat, de
 	}
 
 	try {
+		spinner.text = `Switching to ${chalk.blue(`develop`)}`;
+
 		await execa('git', ['checkout', 'develop']);
+
+		spinner.text = `Creating ${chalk.blue(`develop`)}`;
+
 		await execa('git', ['checkout', '-b', branchName]);
+
+		spinner.text = `Synching to GitHub`;
+
 		await execa('git', ['push', '--set-upstream']);
+
+		spinner.succeed(`You're now on ${chalk.green(branchName)}`);
 	} catch (err) {
 		console.error(chalk.red(`Error creating branch`), err);
 	}
