@@ -1,6 +1,6 @@
 {
   "name": "work",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "index.js",
   "author": "Florian Pichler <f.pichler@anfe.ma>",
   "license": "MIT",
@@ -8,6 +8,7 @@
     "start": "node index.js",
     "work": "bin/work"
   },
+  "bin": { "work": "./bin/work" },
   "dependencies": {
     "@octokit/rest": "~15.11.1",
     "chalk": "^2.4.1",
