@@ -39,7 +39,7 @@ module.exports = async ({ owner, repo, baseBranch, headBranch }) => {
 		title = issue.title;
 		body = `re #${number}`;
 		labels = createLabels(issue.labels);
-		milestone = issue.milestone.number;
+		milestone = issue.milestone && issue.milestone.number; // checks if 'issue.milestone' true -> outputs 'issue.milestone.number'
 	} catch (err) {
 		spinner.fail('Error fetching from GitHub');
 		console.error(err);
