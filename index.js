@@ -8,6 +8,7 @@ const settings = require('./src/settings.js');
 
 const createBranch = require('./src/create-branch.js');
 const createChangelog = require('./src/create-changelog.js');
+const createPullRequest = require('./src/create-pullrequest.js');
 const createLabels = require('./src/create-labels.js');
 const deleteLabels = require('./src/delete-labels.js');
 
@@ -23,7 +24,7 @@ const deleteLabels = require('./src/delete-labels.js');
 				break;
 
 			case 'pr':
-				console.log(chalk.blue(`Pull Requests are not implemented yet`));
+				await createPullRequest(results);
 
 				break;
 

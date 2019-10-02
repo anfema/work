@@ -9,6 +9,7 @@ const settings = require('./settings.js');
 const octokit = require('../lib/octokit.js');
 const githubLogin = require('../lib/github/get-login.js');
 const versionTags = require('../lib/git/version-tags.js');
+const branchList = require('../lib/git/branch-list.js');
 
 const ask = async ({ owner, repo }, program) => {
 	if (!owner || !repo) {
@@ -53,7 +54,7 @@ const ask = async ({ owner, repo }, program) => {
 		const answers = await inquirer.prompt([
 			{
 				name: 'username',
-				message: 'Please enter your username',
+				message: 'Please enter your username (used for ticket-prefix)',
 				type: 'input',
 				default: login,
 				validate(value) {
@@ -118,6 +119,49 @@ const ask = async ({ owner, repo }, program) => {
 		results.task = program.task;
 	}
 
+	if (results.task === 'pr') {
+		const branches = await branchList();
+		const branchSelection = [];
+		const remoteBranches = branches.remote.filter(ele => ele != `origin/${branches.current}`);
+
+		program.headBranch = branches.current;
+		remoteBranches.forEach(item => {
+			if (!item.includes('origin/HEAD ->')) {
+				branchSelection.push(item.replace('origin/', ''));
+			}
+		}); // clean branchlist and remove local branch from remote-branchlist
+
+		const answers = await inquirer.prompt([
+			{
+				name: 'baseBranch',
+				message: `Which base-branch you want your changes pulled into? ${chalk.dim(
+					'Leave empty to select from remote branches'
+				)}`,
+				type: 'input',
+				filter(value) {
+					return `${value}`.match(/\s/) ? '' : value;
+				},
+				when() {
+					return program.baseBranch === undefined;
+				},
+			},
+			{
+				name: 'baseBranch',
+				message: 'Please select base-branch:',
+				type: 'list',
+				pageSize: Math.max(termSize().rows - 7, 5),
+				choices: async () => {
+					return branchSelection;
+				},
+				when(currentAnswers) {
+					return currentAnswers.baseBranch === '';
+				},
+			},
+		]);
+
+		results = Object.assign(results, answers);
+	}
+
 	if (results.task === 'branch' && program.issue === undefined) {
 		const answers = await inquirer.prompt([
 			{
@@ -140,7 +184,7 @@ const ask = async ({ owner, repo }, program) => {
 				pageSize: Math.max(termSize().rows - 7, 5),
 				choices: async () => {
 					try {
-						const issues = await octokit().issues.getForRepo({
+						const issues = await octokit().issues.listForRepo({
 							owner,
 							repo,
 							state: 'open',
