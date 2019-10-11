@@ -7,6 +7,7 @@ program
 	.usage('[options]')
 	.option('-i, --issue [n]', 'Begin work on a specific issue')
 	.option('-c, --changelog [t..t]', 'Render a changelog from Pull Requests')
+	.option('-p, --pullrequest [branch]', 'Create Pull Request to given branch')
 	.option('--sync-labels', 'Sync custom default labels to GitHub')
 	.option('--remove-labels', 'Remove GitHub default labels')
 	.option('--reset-config', 'Clears any configuration made (token, username, etc)')
@@ -22,6 +23,14 @@ if (program.issue) {
 
 	if (program.issue !== true) {
 		args.issue = program.issue;
+	}
+}
+
+if (program.pullrequest) {
+	args.task = 'pr';
+
+	if (typeof program.pullrequest === 'string') {
+		args.baseBranch = program.pullrequest;
 	}
 }
 

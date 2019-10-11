@@ -26,10 +26,6 @@ module.exports = async ({ owner, repo, baseBranch, headBranch }) => {
 	let number = getTicketId(headBranch);
 	let title, body, labels, milestone;
 
-	console.log(baseBranch);
-
-	process.exitCode = 1;
-
 	try {
 		spinner.text = `Fetching information for ticket #${number}`;
 
