@@ -1,47 +1,49 @@
 {
   "name": "work",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "main": "index.js",
   "author": "Florian Pichler <f.pichler@anfe.ma>",
+  "contributors": ["Philipp Skorpil <p.skorpil@anfe.ma>"],
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
     "work": "bin/work"
   },
-  "bin": { "work": "./bin/work" },
+  "bin": {
+    "work": "./bin/work"
+  },
   "dependencies": {
-    "@octokit/rest": "~15.11.1",
+    "@octokit/rest": "^15.18.3",
     "chalk": "^2.4.1",
     "cli-highlight": "^2.0.0",
-    "commander": "^2.17.1",
+    "commander": "^3.0.2",
     "conf": "^2.0.0",
-    "execa": "~1.0.0",
+    "execa": "^2.0.4",
     "git-commits": "~1.3.0",
-    "git-repo-name": "~0.6.0",
+    "git-repo-name": "^1.0.1",
     "git-username": "~1.0.0",
-    "inquirer": "~6.2.0",
-    "lodash": "^4.17.10",
-    "ora": "^3.0.0",
+    "inquirer": "^7.0.0",
+    "lodash": "^4.17.15",
+    "ora": "^3.4.0",
     "p-each-series": "^1.0.0",
     "p-map": "^1.2.0",
     "pify": "~4.0.0",
     "progress": "^2.0.0",
     "rc": "~1.2.8",
     "semver": "~5.5.1",
-    "split2": "~3.0.0",
+    "split2": "^3.1.1",
     "term-size": "^1.2.0",
     "through2": "~2.0.3",
     "through2-filter": "~3.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "~9.0.0",
-    "eslint": "~5.5.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.5.1",
     "eslint-config-anfema": "~5.3.0",
-    "eslint-config-prettier": "~3.0.1",
-    "eslint-plugin-babel": "~5.1.0",
-    "eslint-plugin-import": "~2.14.0",
-    "eslint-plugin-prettier": "~2.6.2",
-    "handlebars": "~4.0.12",
-    "prettier": "~1.14.2"
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "^1.18.2"
   }
 }
