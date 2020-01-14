@@ -119,6 +119,44 @@ const ask = async ({ owner, repo }, program) => {
 		results.task = program.task;
 	}
 
+	if (results.task === 'gh-remove-default-labels') {
+		const answers = await inquirer.prompt([
+			{
+				name: 'removeDefaultLabels',
+				message: `Do you want to remove all default labels from this GitHub-Repo? ${chalk.dim(
+					'Please confirm:'
+				)}`,
+				type: 'confirm',
+				default: false,
+			},
+		]);
+
+		if (!answers.removeDefaultLabels) {
+			results.task = null;
+		}
+
+		results = Object.assign(results, answers);
+	}
+
+	if (results.task === 'gh-sync-custom-labels') {
+		const answers = await inquirer.prompt([
+			{
+				name: 'syncCustomLabels',
+				message: `Do you want to sync anfema-custom labels to this GitHub-Repo? ${chalk.dim(
+					'Please confirm:'
+				)}`,
+				type: 'confirm',
+				default: false,
+			},
+		]);
+
+		if (!answers.syncCustomLabels) {
+			results.task = null;
+		}
+
+		results = Object.assign(results, answers);
+	}
+
 	if (results.task === 'pr') {
 		const branches = await branchList();
 		const branchSelection = [];
