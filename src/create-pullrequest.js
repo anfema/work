@@ -20,9 +20,9 @@ const createLabels = labels => {
 	return labelStrings;
 };
 
-module.exports = async ({ owner, repo, baseBranch, headBranch }) => {
+module.exports = async ({ owner, repo, baseBranch, headBranch, createDraftPullRequest }) => {
 	const spinner = ora('Creating pull request...').start();
-	const [base, head] = [baseBranch, headBranch];
+	const [base, head, draft] = [baseBranch, headBranch, createDraftPullRequest];
 	let number = getTicketId(headBranch);
 	let title, body, labels, milestone;
 
@@ -62,7 +62,16 @@ module.exports = async ({ owner, repo, baseBranch, headBranch }) => {
 
 	try {
 		spinner.text = `Creating pull request for ticket ${chalk.cyan(`#${number} - ${title}`)}`;
-		const res = await octokit().pullRequests.create({ owner, repo, title, head, base, body });
+
+		const res = await octokit().pullRequests.create({
+			owner,
+			repo,
+			title,
+			head,
+			base,
+			body,
+			draft,
+		});
 
 		spinner.info(`Pull request for ticket ${chalk.cyan(`#${number}`)} created`);
 
@@ -82,6 +91,12 @@ module.exports = async ({ owner, repo, baseBranch, headBranch }) => {
 	} catch (err) {
 		spinner.fail('Unable to synchronize labels and milestones with new pull request');
 		console.error(err);
+	}
+
+	if (draft) {
+		spinner.info(
+			'Pull request will be in draft mode - Cannot be merged until marked ready for review'
+		);
 	}
 
 	spinner.succeed('Pull request opened successfully. We are done here!');

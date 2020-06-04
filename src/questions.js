@@ -195,6 +195,15 @@ const ask = async ({ owner, repo }, program) => {
 					return currentAnswers.baseBranch === '';
 				},
 			},
+			{
+				name: 'createDraftPullRequest',
+				message: `Is this new pull request a draft? ${chalk.dim('Please confirm:')}`,
+				type: 'confirm',
+				default: false,
+				when(currentAnswers) {
+					return currentAnswers.baseBranch;
+				},
+			},
 		]);
 
 		results = Object.assign(results, answers);

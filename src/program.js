@@ -8,6 +8,7 @@ program
 	.option('-i, --issue [n]', 'Begin work on a specific issue')
 	.option('-c, --changelog [t..t]', 'Render a changelog from Pull Requests')
 	.option('-p, --pullrequest [branch]', 'Create Pull Request to given branch')
+	.option('-d, --draftpullrequest [branch]', 'Create DraftPull Request to given branch')
 	.option('--sync-labels', 'Sync custom default labels to GitHub')
 	.option('--remove-labels', 'Remove GitHub default labels')
 	.option('--reset-config', 'Clears any configuration made (token, username, etc)')
@@ -31,6 +32,16 @@ if (program.pullrequest) {
 
 	if (typeof program.pullrequest === 'string') {
 		args.baseBranch = program.pullrequest;
+		args.createDraftPullRequest = false;
+	}
+}
+
+if (program.draftpullrequest) {
+	args.task = 'pr';
+
+	if (typeof program.draftpullrequest === 'string') {
+		args.baseBranch = program.draftpullrequest;
+		args.createDraftPullRequest = true;
 	}
 }
 
