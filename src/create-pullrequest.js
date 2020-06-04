@@ -62,11 +62,6 @@ module.exports = async ({ owner, repo, baseBranch, headBranch, createDraftPullRe
 
 	try {
 		spinner.text = `Creating pull request for ticket ${chalk.cyan(`#${number} - ${title}`)}`;
-		if (draft) {
-			spinner.info(
-				'Pull request will be in draft mode - Cannot be merged until marked ready for review'
-			);
-		}
 
 		const res = await octokit().pullRequests.create({
 			owner,
@@ -96,6 +91,12 @@ module.exports = async ({ owner, repo, baseBranch, headBranch, createDraftPullRe
 	} catch (err) {
 		spinner.fail('Unable to synchronize labels and milestones with new pull request');
 		console.error(err);
+	}
+
+	if (draft) {
+		spinner.info(
+			'Pull request will be in draft mode - Cannot be merged until marked ready for review'
+		);
 	}
 
 	spinner.succeed('Pull request opened successfully. We are done here!');
