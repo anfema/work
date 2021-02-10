@@ -32,6 +32,10 @@ yarn global add anfema/work
 This tool will ask for any required configuration. If you want to adjust default settings, you can add a JSON object to `.config/work` to adjust settings as necessary. Note: This should not be the case for anfema repositories.
 
 
+## Troubleshooting
+
+- The auto-generated config-file is located under `~/Library/Preferences/work-nodejs/config.json` and can be deleted/changed there
+
 
 ## Credits
 
