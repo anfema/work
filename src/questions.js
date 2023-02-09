@@ -12,7 +12,7 @@ const versionTags = require('../lib/git/version-tags.js');
 const branchList = require('../lib/git/branch-list.js');
 
 const ask = async ({ owner, repo }, program) => {
-	if (!owner || !repo) {
+	if (!owner) {
 		console.log(
 			chalk.red(`${process.cwd()} doesn't originate from a GitHub based repository.\n`)
 		);
@@ -27,7 +27,7 @@ const ask = async ({ owner, repo }, program) => {
 	if (config.get('token') === '') {
 		console.log(
 			chalk.yellow(
-				'\nWork did not find your Personal access token for GitHub. \nYou can aquire one on here: https://github.com/settings/tokens\n'
+				'\nWork did not find your Personal access token for GitHub. \nYou can acquire one on here: https://github.com/settings/tokens\n'
 			)
 		);
 
@@ -90,7 +90,9 @@ const ask = async ({ owner, repo }, program) => {
 				choices: [
 					new inquirer.Separator(`--- ${owner}/${repo}: Work ---`),
 					{
-						name: `Create a branch for an issue`,
+						name: `Create a branch for an issue ${chalk.red(
+							'(From the current active branch!)'
+						)}`,
 						value: 'branch',
 					},
 					{
@@ -215,6 +217,8 @@ const ask = async ({ owner, repo }, program) => {
 				name: 'issue',
 				message: `Which issue should be worked on? ${chalk.dim(
 					'Leave empty to select from open'
+				)} ${chalk.red(
+					'(Please Note: The new branch will be based on the currently active branch!)'
 				)}`,
 				type: 'input',
 				filter(value) {
