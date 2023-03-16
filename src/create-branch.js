@@ -17,7 +17,7 @@ const buildBranchName = (branchFormat, { username, number, title }) => {
 	return branchName;
 };
 
-module.exports = async ({ owner, repo, issue: number, username, branchFormat, defaultBranch }) => {
+module.exports = async ({ owner, repo, issue: number, username, branchFormat }) => {
 	const spinner = ora('Creating branch…').start();
 
 	try {
@@ -68,19 +68,19 @@ module.exports = async ({ owner, repo, issue: number, username, branchFormat, de
 		return;
 	}
 
-	if (status.local !== defaultBranch && status.clean === false) {
-		spinner.fail(
-			`Can't create branch. You are on ${chalk.blue(status.local)} and have ${
-				status.files.length
-			} modified file${status.files.length === 1 ? '' : 's'}: ${chalk.reset(
-				status.files.map(line => `\n${line.state} ${line.file}`)
-			)}`
-		);
+	// if (status.clean === false) {
+	// 	spinner.fail(
+	// 		`Can't create branch. The current Branch you are on (${chalk.blue(status.local)}) has ${
+	// 			status.files.length
+	// 		} modified file${status.files.length === 1 ? '' : 's'}: ${chalk.reset(
+	// 			status.files.map(line => `\n${line.state} ${line.file}`)
+	// 		)}`
+	// 	);
 
-		process.exitCode = 1;
+	// 	process.exitCode = 1;
 
-		return;
-	}
+	// 	return;
+	// }
 
 	spinner.text = `Checking branches`;
 
@@ -95,19 +95,23 @@ module.exports = async ({ owner, repo, issue: number, username, branchFormat, de
 	}
 
 	try {
-		spinner.text = `Switching to ${chalk.blue(`develop`)}`;
+		// spinner.text = `Switching to ${chalk.blue(`develop`)}`;
 
-		await execa('git', ['checkout', 'develop']);
+		// await execa('git', ['checkout', 'develop']);
 
-		spinner.text = `Creating ${chalk.blue(`develop`)}`;
+		// spinner.text = `Creating ${chalk.blue(`develop`)}`;
 
-		await execa('git', ['checkout', '-b', branchName]);
+		spinner.text = `Checking out the current branch ${chalk.blue(status.local)}`;
 
-		spinner.text = `Synching to GitHub`;
+		await execa('git', ['checkout', '-b', branchName, status.local]);
+
+		spinner.text = `Syncing to GitHub`;
 
 		await execa('git', ['push', '--set-upstream']);
 
-		spinner.succeed(`You're now on ${chalk.green(branchName)}`);
+		spinner.succeed(
+			`You're now on ${chalk.green(branchName)} based from ${chalk.blue(status.local)}`
+		);
 	} catch (err) {
 		console.error(chalk.red(`Error creating branch`), err);
 	}
