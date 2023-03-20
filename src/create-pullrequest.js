@@ -33,7 +33,7 @@ module.exports = async ({ owner, repo, baseBranch, headBranch, createDraftPullRe
 		const issue = res.data;
 
 		title = issue.title;
-		body = `re #${number}`;
+		body = `closes #${number}`;
 		labels = createLabels(issue.labels);
 		milestone = issue.milestone && issue.milestone.number; // checks if 'issue.milestone' true -> outputs 'issue.milestone.number'
 	} catch (err) {
