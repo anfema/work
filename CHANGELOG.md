@@ -35,3 +35,11 @@
 ### 1.4.0
 **New Features & Improvements**
 - add draft pull requests
+
+### 1.4.1
+**New Features & Improvements**
+- allow branching and pull-requests from every base-branch
+
+### 1.4.2
+**New Features & Improvements**
+- use `closes` instead of `re` for PR-Body
