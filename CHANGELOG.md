@@ -36,7 +36,6 @@
 **New Features & Improvements**
 - add draft pull requests
 
-
 ### 1.4.1
 **New Features & Improvements**
 - allow branching and pull-requests from every base-branch
